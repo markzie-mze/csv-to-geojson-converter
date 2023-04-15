@@ -1,0 +1,34 @@
+import geojson
+import csv
+
+# Open the CSV file and create a reader object
+
+with open('filename.csv', 'r') as f:
+    reader = csv.DictReader(f)
+
+
+# Create a list to hold the GeoJSON features
+    features = []
+
+
+# Loop through the CSV rows and create a feature for each row
+    
+    for row in reader:
+        # Get the latitude and longitude from the row
+        lat = float(row['Lat'])
+        lon = float(row['Lon'])
+
+        # Create a GeoJSON point feature with the latitude and longitude
+        point = geojson.Point((lon, lat))
+        feature = geojson.Feature(geometry=point, properties=row)
+
+        # Add the feature to the list of features
+        features.append(feature)
+
+# Create a GeoJSON feature collection with the features list
+feature_collection = geojson.FeatureCollection(features)
+
+# Write the feature collection to a GeoJSON file
+
+with open('filename.geojson', 'w') as f:
+    geojson.dump(feature_collection, f)
